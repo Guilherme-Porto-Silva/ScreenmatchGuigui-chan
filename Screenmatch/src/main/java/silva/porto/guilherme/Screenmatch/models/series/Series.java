@@ -50,7 +50,7 @@ import java.util.OptionalDouble;
 
         this.title = data.title();
 
-        this.howManySeasons = (byte) data.howManySeasons();
+        this.howManySeasons = data.howManySeasons();
 
         this.themes = SeriesCategory.parseSeriesCategory(data.themes().split(", ")[0].strip());
 

@@ -1,9 +1,7 @@
 package silva.porto.guilherme.Screenmatch.service.json;
 
 import tools.jackson.core.JacksonException;
-
 import tools.jackson.databind.ObjectMapper;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.regex.Matcher;

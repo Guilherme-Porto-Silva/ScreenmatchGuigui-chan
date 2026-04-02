@@ -3,10 +3,13 @@ package silva.porto.guilherme.Screenmatch.main;
 import silva.porto.guilherme.Screenmatch.models.episode.Episode;
 import silva.porto.guilherme.Screenmatch.models.SeasonData;
 import silva.porto.guilherme.Screenmatch.models.series.Series;
+import silva.porto.guilherme.Screenmatch.models.series.SeriesCategory;
 import silva.porto.guilherme.Screenmatch.models.series.SeriesData;
 import silva.porto.guilherme.Screenmatch.repository.SeriesRepository;
 import silva.porto.guilherme.Screenmatch.service.json.ConvertData;
 import silva.porto.guilherme.Screenmatch.service.json.DataGET;
+
+import java.net.ServerSocket;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +31,42 @@ public class Core {
 // On Windows, environment variables are generally case-insensitive, but on Linux/Unix, they are case-sensitive.
 
 // System.getenv("path") might return null on Linux, while System.getenv("PATH") works.
+
+
+
+    private double extractDouble () {
+
+        double parsing;
+
+        while (true) {
+
+            String typed = scanf.nextLine().strip();
+
+            try {
+                parsing = Double.parseDouble(typed);
+
+                break;
+            }
+
+            catch (NumberFormatException e) {
+
+                try {
+                    typed = typed.replace('.',',');
+
+                    parsing = Double.parseDouble(typed);
+
+                    break;
+                }
+
+                catch (NumberFormatException ex) {
+
+                    System.out.print("\nType ONLY the - decimal (like 0.0 or 5.0) - number: ");
+                }
+            }
+        }
+
+        return parsing;
+    }
 
 
 
@@ -188,7 +227,7 @@ public class Core {
 
 
 
-    private void showBestFive(List<Episode> allEpisodes){
+    private void bestFiveEpisodes(List<Episode> allEpisodes){
 
         allEpisodes.stream().sorted(Comparator.comparingDouble(Episode::getRate)
 
@@ -258,30 +297,6 @@ public class Core {
         // Didn't use DoubleSummaryStatistics for this one because I wanted
         // just the amount of non-rated episodes.
     }
-
-
-
-//    public void printSeries (List<SeriesData> printedSeries) {
-//
-//        int howManySeries = printedSeries.size();
-//
-//        for (int i = 0; i < howManySeries; i++) {
-//
-//            System.out.println("\nDATA FOR " + (i + 1) + "TH SERIES");
-//
-//            System.out.println("\nTitle: " + printedSeries.get(i).title());
-//
-//            System.out.println("\nGenre: " + printedSeries.get(i).themes());
-//
-//            System.out.println("\nPlot: " + printedSeries.get(i).script());
-//
-//            System.out.println("\nNumber of seasons: " + printedSeries.get(i).howManySeasons());
-//
-//            System.out.println("\nimdb rating: " + printedSeries.get(i).rate());
-//
-//            System.out.println('\n' + printedSeries.get(i).actors() + " act in this series roles.");
-//        }
-//    }
 
 
 
@@ -526,17 +541,78 @@ public class Core {
 
     private void querySeriesByActor() {
 
+        List<Series> queriedSeries = new ArrayList<Series>();// to make sure it starts empty
+
         System.out.print("\nType an actor's name: ");
 
         String actorName = scanf.nextLine().strip();
 
-        List<Series> queriedSeries = new ArrayList<Series>();// to make sure it starts empty
+        System.out.println("\nType the minimum rate the series with that actor need to have");
 
-        queriedSeries = REPOSITORY.findByActorsContainingIgnoreCase(actorName);
+        System.out.print("in order to apear in the search: ");
+
+        queriedSeries = REPOSITORY.findByActorsContainingIgnoreCaseAndGreaterThanEqual(actorName, extractDouble());
 
         if (queriedSeries.isEmpty()) System.out.println('\n' + '"' + actorName + "\" did not act in any series present in my data bank.");
 
         else queriedSeries.forEach(System.out::println);
+    }
+
+
+
+    private void bestFiveSeries() {
+
+        REPOSITORY.findTop5ByOrderByRateDesc().forEach(System.out::println);
+    }
+
+
+
+    private void querySeriesByCategory() {
+
+        List<Series> foundSeries = new ArrayList<>();
+
+        while (true) {
+
+            System.out.print("\nType the theme: ");
+
+            String typedTheme = scanf.nextLine().strip();
+
+            try {
+                REPOSITORY.findByThemes(SeriesCategory.parseSeriesCategory(typedTheme)).forEach(foundSeries::add);
+
+                break;
+            }
+
+            catch (Exception e) {
+
+                System.out.println("\nThe problem \"" + e + "\" was detected.");
+
+                System.out.println("Enter \"quit\" if you do not want to try typing the theme again,");
+
+                System.out.print("or \"continue\", if you do: ");
+
+                if (scanf.nextLine().toLowerCase().contains("q")) break;
+            }
+        }
+
+        foundSeries.forEach(System.out::println);
+    }
+
+
+
+    private void optimizeWeekend() {
+
+        System.out.print("\nType maximum seasons amount: ");
+
+        double maximumSeasons = extractDouble();
+
+        System.out.print("\nType minimum rate: ");
+
+        double minimumRate = extractDouble();
+
+        List<Series> foundSeries = REPOSITORY.findByHowManySeasonsLowerThanEqualAndRateGreaterThanEqual(maximumSeasons, minimumRate);
+
+        foundSeries.forEach(System.out::println);
     }
 
 
@@ -554,19 +630,25 @@ public class Core {
                
                 3 - See all episodes from an specified season
                
-                4 - See the best five rated episodes
+                4 - See the best five rated series
                
-                5 - See of which season an episode is
+                5 - See the best five rated episodes
                
-                6 - See how each season was rated
+                6 - See of which season an episode is
                
-                7 - See the summary statistics
+                7 - See how each season was rated
+               
+                8 - See the summary statistics
                 
-                8 - List already searched series
+                9 - List already searched series
                 
-                9 - Query series by title
+                10 - Query series by title
                 
-                10 - Query series by actor
+                11 - Query series by actor
+                
+                12 - Query series by category
+                
+                13 - Query series with a maximum seasons amount AND a minimum rate
                
                 Type the number on the left of the option you wish:\s""");
 
@@ -580,19 +662,25 @@ public class Core {
 
             case 3 -> showBasedOnSeason(allEpisodes);
 
-            case 4 -> showBestFive(allEpisodes);
+            case 4 -> bestFiveSeries();
 
-            case 5 -> showSeasonOfEpisode(allEpisodes);
+            case 5 -> bestFiveEpisodes(allEpisodes);
 
-            case 6 -> showSeasonRates(allEpisodes);
+            case 6 -> showSeasonOfEpisode(allEpisodes);
 
-            case 7 -> showSummaryStatistics(allEpisodes);
+            case 7 -> showSeasonRates(allEpisodes);
 
-            case 8 -> alreadySearchedSeries();
+            case 8 -> showSummaryStatistics(allEpisodes);
 
-            case 9 -> querySeriesByTitle();
+            case 9 -> alreadySearchedSeries();
 
-            case 10 -> querySeriesByActor();
+            case 10 -> querySeriesByTitle();
+
+            case 11 -> querySeriesByActor();
+
+            case 12 -> querySeriesByCategory();
+
+            case 13 -> optimizeWeekend();
 
             default -> System.out.println("\nPlease, type one of the numbers on the left of an option, according to the provided menu.");
         }
