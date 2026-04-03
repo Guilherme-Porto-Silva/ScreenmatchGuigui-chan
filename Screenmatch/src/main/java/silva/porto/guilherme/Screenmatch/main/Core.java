@@ -610,7 +610,7 @@ public class Core {
 
         double minimumRate = extractDouble();
 
-        List<Series> foundSeries = REPOSITORY.findByHowManySeasonsLowerThanEqualAndRateGreaterThanEqual(maximumSeasons, minimumRate);
+        List<Series> foundSeries = REPOSITORY.findSeriesMaxSeasonsMinRate(maximumSeasons, minimumRate);
 
         foundSeries.forEach(System.out::println);
     }
