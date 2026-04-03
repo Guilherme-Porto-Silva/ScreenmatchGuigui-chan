@@ -8,10 +8,10 @@ import silva.porto.guilherme.Screenmatch.models.series.SeriesData;
 import silva.porto.guilherme.Screenmatch.repository.SeriesRepository;
 import silva.porto.guilherme.Screenmatch.service.json.ConvertData;
 import silva.porto.guilherme.Screenmatch.service.json.DataGET;
-
-import java.net.ServerSocket;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Core {
@@ -19,6 +19,8 @@ public class Core {
     private final ConvertData CONVERTER = new ConvertData();
 
     public final Scanner scanf = new Scanner(System.in);
+
+    public final Pattern DOUBLE = Pattern.compile("\\d+[.,]\\d+");
 
     private final String ADDRESS = "https://www.omdbapi.com/t=";
 
@@ -36,36 +38,16 @@ public class Core {
 
     private double extractDouble () {
 
-        double parsing;
-
         while (true) {
 
             String typed = scanf.nextLine().strip();
 
-            try {
-                parsing = Double.parseDouble(typed);
+            Matcher doubleMatcher = DOUBLE.matcher(typed);
 
-                break;
-            }
+            if (doubleMatcher.find()) return Double.parseDouble(doubleMatcher.group());
 
-            catch (NumberFormatException e) {
-
-                try {
-                    typed = typed.replace('.',',');
-
-                    parsing = Double.parseDouble(typed);
-
-                    break;
-                }
-
-                catch (NumberFormatException ex) {
-
-                    System.out.print("\nType ONLY the - decimal (like 0.0 or 5.0) - number: ");
-                }
-            }
+            else System.out.print("\nType a decimal number, with ',' or '.': ");
         }
-
-        return parsing;
     }
 
 
@@ -617,6 +599,13 @@ public class Core {
 
 
 
+    private void queryEpisodesTitlePiece() {
+
+        System.out.print("\nType a piece of the episode's title: ");
+    }
+
+
+
     public void useSeriesData () {
 
         List<Episode> allEpisodes = searchForSeries();
@@ -648,7 +637,9 @@ public class Core {
                 
                 12 - Query series by category
                 
-                13 - Query series with a maximum seasons amount AND a minimum rate
+                13 - See all series with a maximum seasons amount AND a minimum rate
+                
+                14 - Query episodes by title piece
                
                 Type the number on the left of the option you wish:\s""");
 
@@ -681,6 +672,8 @@ public class Core {
             case 12 -> querySeriesByCategory();
 
             case 13 -> optimizeWeekend();
+
+            case 14 -> queryEpisodesTitlePiece();
 
             default -> System.out.println("\nPlease, type one of the numbers on the left of an option, according to the provided menu.");
         }

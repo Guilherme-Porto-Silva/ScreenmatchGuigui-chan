@@ -19,6 +19,6 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     List<Series> findByHowManySeasonsLessThanEqualAndRateGreaterThanEqual(double maximumSeasons, double minimumRate);
 
-    @Query("select s from Series s WHERE s.howManySeasons <= :maximumSeasons AND s.rate >= :minimumRate")
+    @Query("select s from Series s where s.howManySeasons <= :maximumSeasons and s.rate >= :minimumRate")
     List<Series> findSeriesMaxSeasonsMinRate(double maximumSeasons, double minimumRate);
 }
