@@ -22,6 +22,8 @@ public class Core {
 
     public final Pattern DOUBLE = Pattern.compile("\\d+[.,]\\d+");
 
+    public final Pattern INTEGER = Pattern.compile("\\d+");
+
     private final String ADDRESS = "https://www.omdbapi.com/t=";
 
     private final String API_KEY = System.getenv("API_KEY_PATH");
@@ -40,13 +42,25 @@ public class Core {
 
         while (true) {
 
-            String typed = scanf.nextLine().strip();
-
-            Matcher doubleMatcher = DOUBLE.matcher(typed);
+            Matcher doubleMatcher = DOUBLE.matcher(scanf.nextLine());
 
             if (doubleMatcher.find()) return Double.parseDouble(doubleMatcher.group());
 
             else System.out.print("\nType a decimal number, with ',' or '.': ");
+        }
+    }
+
+
+
+    private int extractInteger () {
+
+        while (true) {
+
+            Matcher intMatcher = INTEGER.matcher(scanf.nextLine());
+
+            if (intMatcher.find()) return Integer.parseInt(intMatcher.group());
+
+            else System.out.print("\nType an integer number: ");
         }
     }
 
@@ -643,7 +657,7 @@ public class Core {
                
                 Type the number on the left of the option you wish:\s""");
 
-        int will = Integer.parseInt(scanf.nextLine());
+        int will = extractInteger();
 
         switch (will) {
 
