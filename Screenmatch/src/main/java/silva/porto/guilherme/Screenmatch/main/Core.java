@@ -20,7 +20,7 @@ public class Core {
 
     public final Scanner scanf = new Scanner(System.in);
 
-    public final Pattern DOUBLE = Pattern.compile("\\d+[.,]\\d+");
+    public final Pattern DOUBLE = Pattern.compile("\\d+([.,]\\d+)?");
 
     public final Pattern INTEGER = Pattern.compile("\\d+");
 
@@ -616,80 +616,100 @@ public class Core {
     private void queryEpisodesTitlePiece() {
 
         System.out.print("\nType a piece of the episode's title: ");
+
+        String piece = scanf.nextLine().strip();
+
+        List<Episode> foundEpisodes = REPOSITORY.episodesByTitlePiece(piece);
+
+        foundEpisodes.forEach(System.out::println);
     }
 
 
 
     public void useSeriesData () {
 
+        boolean active = true;
+
         List<Episode> allEpisodes = searchForSeries();
 
-        System.out.print("""
-                Now, you can:
-               
-                1 - Just see ALL episodes
-               
-                2 - See episodes based on a date
-               
-                3 - See all episodes from an specified season
-               
-                4 - See the best five rated series
-               
-                5 - See the best five rated episodes
-               
-                6 - See of which season an episode is
-               
-                7 - See how each season was rated
-               
-                8 - See the summary statistics
-                
-                9 - List already searched series
-                
-                10 - Query series by title
-                
-                11 - Query series by actor
-                
-                12 - Query series by category
-                
-                13 - See all series with a maximum seasons amount AND a minimum rate
-                
-                14 - Query episodes by title piece
-               
-                Type the number on the left of the option you wish:\s""");
+        while (active) {
 
-        int will = extractInteger();
+            System.out.print("""
+                    Now, you can:
+                    
+                    1 - Quit the application
+                    
+                    2 - Just see ALL episodes
+                    
+                    3 - See episodes based on a date
+                    
+                    4 - See all episodes from an specified season
+                    
+                    5 - See the best five rated series
+                    
+                    6 - See the best five rated episodes
+                    
+                    7 - See of which season an episode is
+                    
+                    8 - See how each season was rated
+                    
+                    9 - See the summary statistics
+                    
+                    10 - List already searched series
+                    
+                    11 - Query series by title
+                    
+                    12 - Query series by actor
+                    
+                    13 - Query series by category
+                    
+                    14 - See all series with a maximum seasons amount AND a minimum rate
+                    
+                    15 - Query episodes by title piece
+                    
+                    Type the number on the left of the option you wish:\s""");
 
-        switch (will) {
+            int will = extractInteger();
 
-            case 1 -> showAll(allEpisodes);
+            switch (will) {
 
-            case 2 -> showBasedOnDate(allEpisodes);
+                case 1 -> {
 
-            case 3 -> showBasedOnSeason(allEpisodes);
+                    System.out.println("\nHave a good day! :)");
 
-            case 4 -> bestFiveSeries();
+                    active = false;
+                }
 
-            case 5 -> bestFiveEpisodes(allEpisodes);
+                case 2 -> showAll(allEpisodes);
 
-            case 6 -> showSeasonOfEpisode(allEpisodes);
+                case 3 -> showBasedOnDate(allEpisodes);
 
-            case 7 -> showSeasonRates(allEpisodes);
+                case 4 -> showBasedOnSeason(allEpisodes);
 
-            case 8 -> showSummaryStatistics(allEpisodes);
+                case 5 -> bestFiveSeries();
 
-            case 9 -> alreadySearchedSeries();
+                case 6 -> bestFiveEpisodes(allEpisodes);
 
-            case 10 -> querySeriesByTitle();
+                case 7 -> showSeasonOfEpisode(allEpisodes);
 
-            case 11 -> querySeriesByActor();
+                case 8 -> showSeasonRates(allEpisodes);
 
-            case 12 -> querySeriesByCategory();
+                case 9 -> showSummaryStatistics(allEpisodes);
 
-            case 13 -> optimizeWeekend();
+                case 10 -> alreadySearchedSeries();
 
-            case 14 -> queryEpisodesTitlePiece();
+                case 11 -> querySeriesByTitle();
 
-            default -> System.out.println("\nPlease, type one of the numbers on the left of an option, according to the provided menu.");
+                case 12 -> querySeriesByActor();
+
+                case 13 -> querySeriesByCategory();
+
+                case 14 -> optimizeWeekend();
+
+                case 15 -> queryEpisodesTitlePiece();
+
+                default -> System.out.println("\nPlease, type one of the numbers on the left of an option, according to the provided menu.");
+            }
         }
     }
 }

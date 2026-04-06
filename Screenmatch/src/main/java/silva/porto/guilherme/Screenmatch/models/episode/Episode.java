@@ -84,13 +84,14 @@ import java.time.format.DateTimeParseException;
     public Episode(EpisodeData data, int season) { new Episode(data, season, null); }
 
 
+
     @Override public String toString() {
 
-        return "season = " + season +
-                "\ntitle = '" + title + '\'' +
-                "\norder position = " + orderPosition +
-                "\nrate = " + rate +
-                "\nrelease date = " + releaseDate.format(DATE_FORM);
+        return String.format("Série: \"%s\" - Temporada %d - Episódio %d - Title: \"%s\"",
+                series.getTitle(),
+                season,
+                orderPosition,
+                title);
     }
 
 
