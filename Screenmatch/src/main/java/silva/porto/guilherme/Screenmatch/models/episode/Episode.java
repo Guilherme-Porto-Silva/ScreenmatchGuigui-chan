@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException;
 
 @Table(name = "episodes") public class Episode {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
     private static final DateTimeFormatter DATE_FORM = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -23,6 +23,8 @@ import java.time.format.DateTimeParseException;
     public String getTitle() { return title; }
 
     private int orderPosition;
+
+    public int getOrderPosition() { return orderPosition; }
 
     private double rate;
 

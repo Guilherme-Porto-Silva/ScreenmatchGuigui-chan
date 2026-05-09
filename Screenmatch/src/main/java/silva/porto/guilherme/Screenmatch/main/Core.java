@@ -5,7 +5,6 @@ import silva.porto.guilherme.Screenmatch.models.SeasonData;
 import silva.porto.guilherme.Screenmatch.models.series.Series;
 import silva.porto.guilherme.Screenmatch.models.series.SeriesCategory;
 import silva.porto.guilherme.Screenmatch.models.series.SeriesData;
-import silva.porto.guilherme.Screenmatch.repository.SeriesRepository;
 import silva.porto.guilherme.Screenmatch.service.json.ConvertData;
 import silva.porto.guilherme.Screenmatch.service.json.DataGET;
 import java.time.LocalDate;
@@ -27,10 +26,6 @@ public class Core {
     private final String ADDRESS = "https://www.omdbapi.com/t=";
 
     private final String API_KEY = System.getenv("API_KEY_PATH");
-
-    private final SeriesRepository REPOSITORY;
-
-    public Core (SeriesRepository repository) { REPOSITORY = repository; }
 
 // On Windows, environment variables are generally case-insensitive, but on Linux/Unix, they are case-sensitive.
 

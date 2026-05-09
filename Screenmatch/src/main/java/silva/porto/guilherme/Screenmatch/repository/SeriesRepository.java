@@ -2,6 +2,7 @@ package silva.porto.guilherme.Screenmatch.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.PathVariable;
 import silva.porto.guilherme.Screenmatch.models.episode.Episode;
 import silva.porto.guilherme.Screenmatch.models.series.Series;
 import silva.porto.guilherme.Screenmatch.models.series.SeriesCategory;
@@ -25,4 +26,14 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     @Query("SELECT e FROM Series s JOIN s.episodes e WHERE e.title ILIKE %:piece%")
     List<Episode> episodesByTitlePiece(String piece);
+
+    List<Series> findTop5ByOrderByEpisodesReleaseDate();
+
+    List<Series> findTop5ByOrderByEpisodesReleaseDateDesc();
+
+    @Query("SELECT s FROM Series s JOIN s.episodes e GROUP BY s ORDER BY MAX(e.releaseDate) DESC LIMIT 5")
+    List<Series> lastEpisodes();
+
+    @Query("SELECT e FROM Series s JOIN s.episodes e WHERE s.id = :id AND e.season = :seasonOrderPosition")
+    List<Episode> getEpisodesBySeason(Long id, byte seasonOrderPosition);
 }

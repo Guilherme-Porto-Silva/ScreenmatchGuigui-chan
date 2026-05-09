@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import silva.porto.guilherme.Screenmatch.models.episode.Episode;
 import silva.porto.guilherme.Screenmatch.service.translate.AskChatGPT;
 import silva.porto.guilherme.Screenmatch.service.translate.AskMyMemory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -13,7 +12,7 @@ import java.util.OptionalDouble;
 
 @Table(name = "series") public class Series {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
     @Column(unique = true) private final String title;
 
@@ -84,6 +83,8 @@ import java.util.OptionalDouble;
     public SeriesCategory getThemes() { return themes; }
 
     public Double getRate() { return rate; }
+
+    public List<Episode> getEpisodes() { return episodes; }
 
 
 
