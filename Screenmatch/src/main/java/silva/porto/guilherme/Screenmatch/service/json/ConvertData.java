@@ -1,5 +1,6 @@
 package silva.porto.guilherme.Screenmatch.service.json;
 
+import silva.porto.guilherme.Screenmatch.exceptions.DataConvertionException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import java.time.DateTimeException;
@@ -15,17 +16,13 @@ public class ConvertData implements IConvertData {
 
 
 
-    @Override public <T> T convertData(String json, Class<T> type) {
+    @Override public <T> T convertData (String json, Class<T> type) {
 
         try{ return mapper.readValue(json, type); }
 
         catch (JacksonException e) {
 
-            System.out.println("\nThe problem " + e + " happened.");
-
-            System.out.println("Maybe, \"" + json + "\" was not a valid JavaScript object notation.");
-
-            throw e;
+            throw new DataConvertionException(json);
         }
     }
 
@@ -48,7 +45,7 @@ public class ConvertData implements IConvertData {
 
         catch (DateTimeException e) {
 
-            throw new ClassCastException("Failed to convert what the user typed (\"" + typedDate + "\") into a LocalDate class because they typed and invalid number.");
+            throw new ClassCastException("Failed to convert what the user typed (\"" + typedDate + "\") into a LocalDate class because they typed an invalid number.");
         }
 
         else throw new ClassCastException("Failed to convert what the user typed (\"" + typedDate + "\") into a LocalDate class using regular expression.");

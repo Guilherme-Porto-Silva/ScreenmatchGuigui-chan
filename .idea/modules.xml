@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Screenmatch.iml" filepath="$PROJECT_DIR$/.idea/Screenmatch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Screenmatch/Screenmatch.iml" filepath="$PROJECT_DIR$/Screenmatch/Screenmatch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ScreenmatchGuigui-chan.iml" filepath="$PROJECT_DIR$/.idea/ScreenmatchGuigui-chan.iml" />
     </modules>
   </component>
 </project>

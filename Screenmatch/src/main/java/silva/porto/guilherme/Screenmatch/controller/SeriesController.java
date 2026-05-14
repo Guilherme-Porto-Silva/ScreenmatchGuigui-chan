@@ -23,11 +23,6 @@ public class SeriesController {
         return service.getSeries();
     }
 
-//    @GetMapping("/lancamentos") public List<DataTrasferSeries> getRelizesEpisodes(){
-//
-//        return service.getRelizesEpisodes();
-//    }
-
     @GetMapping("/lancamentos") public List<DataTrasferSeries> getRelizesSeries(){
 
         return service.getRelizesSeries();

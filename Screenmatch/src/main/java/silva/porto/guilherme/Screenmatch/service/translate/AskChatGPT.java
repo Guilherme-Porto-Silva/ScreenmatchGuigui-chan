@@ -1,6 +1,7 @@
 package silva.porto.guilherme.Screenmatch.service.translate;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
+import silva.porto.guilherme.Screenmatch.exceptions.ArgumentAmountException;
 
 public class AskChatGPT {
 
@@ -56,7 +57,7 @@ public class AskChatGPT {
 
         if (args.length == 3) return translatePromptBuilder(args[0], args[1], args[2]);
 
-        throw new IllegalArgumentException("Not preparade for that amount of arguments.");
+        throw new ArgumentAmountException();
     }
     
     

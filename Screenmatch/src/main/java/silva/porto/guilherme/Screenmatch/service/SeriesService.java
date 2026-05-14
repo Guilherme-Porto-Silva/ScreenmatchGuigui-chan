@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import silva.porto.guilherme.Screenmatch.DTO.DataTrasferEpisode;
 import silva.porto.guilherme.Screenmatch.DTO.DataTrasferSeries;
+import silva.porto.guilherme.Screenmatch.exceptions.NotInDataBank;
 import silva.porto.guilherme.Screenmatch.models.episode.Episode;
 import silva.porto.guilherme.Screenmatch.models.series.Series;
 import silva.porto.guilherme.Screenmatch.models.series.SeriesCategory;
@@ -57,7 +58,7 @@ public class SeriesService {
 
             return possiblyFoundSeries.get();
 
-        throw new IllegalArgumentException("Could not find a series identified as " + id);
+        throw new NotInDataBank("series", id);
     }
 
 
